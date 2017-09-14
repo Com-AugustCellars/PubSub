@@ -1,0 +1,36 @@
+# Build Folders (you can keep bin if you'd like, to store dlls and pdbs)
+[Bb]in/
+[Oo]bj/
+lib
+.svn
+Apps
+cov-int
+
+# DNX project file with a complete list of resolved dependencies
+project.lock.json
+
+# User-specific files
+*.suo
+*.user
+*.sln.docstates
+*.dev.csproj
+nuspec.bat
+
+# MSTest test Results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# Visual Studio not saved
+.vs
+*.snk
+
+
+# NuGet Packages Directory
+packages/
+*.nupkg
+
+# Emacs turds
+*#
+*~
+*.bak
+.#*
