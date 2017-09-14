@@ -6,28 +6,41 @@ using System.Threading.Tasks;
 using Com.AugustCellars.CoAP;
 using Com.AugustCellars.CoAP.Server.Resources;
 
-namespace PubSub
+namespace Com.AugustCellars.CoAP.PubSub
 {
+    /// <summary>
+    /// Class implementing the leaf behavior for the PubSub REST API
+    /// </summary>
     public class PubSubLeaf : Resource
     {
         private byte[] _content;
         private int _contentType;
         private DateTime _publishTime;
 
-        public int MaxAge { get ; set ; }
+        /// <summary>
+        /// Time in seconds from the publish to expiration
+        /// 0 means never expire.
+        /// </summary>
+        public int MaxAge { get; set; }
 
+        /// <summary>
+        /// Construct a PubSubLeaf node
+        /// </summary>
+        /// <param name="name">name of the node</param>
         public PubSubLeaf(string name) : base(name)
         {
             Observable = true;
             _publishTime = DateTime.Now;
         }
 
+        /// <inheritdoc />
         protected override void DoDelete(CoapExchange exchange)
         {
             Parent.Remove(this);
             exchange.Respond(StatusCode.Deleted);
         }
 
+        /// <inheritdoc />
         protected override void DoGet(CoapExchange exchange)
         {
             if (IsExpired()) {
@@ -46,7 +59,8 @@ namespace PubSub
                         payload = ConvertTo(option.IntValue);
                         break;
                     }
-                    catch { }
+                    catch {
+                    }
                     ;
                 }
             }
@@ -58,11 +72,13 @@ namespace PubSub
             exchange.Respond(response);
         }
 
+        /// <inheritdoc />
         protected override void DoPost(CoapExchange exchange)
         {
             base.DoPost(exchange);
         }
 
+        /// <inheritdoc />
         protected override void DoPut(CoapExchange exchange)
         {
             Request req = exchange.Request;
@@ -98,7 +114,12 @@ namespace PubSub
         }
 
 
-
+        /// <summary>
+        /// Change content type between the acutal content and the desired content.
+        /// Default action is to never do conversions
+        /// </summary>
+        /// <param name="accept">Media Type that is desired</param>
+        /// <returns>converted content</returns>
         public virtual byte[] ConvertTo(int accept)
         {
             if (accept != _contentType) {
@@ -108,6 +129,10 @@ namespace PubSub
             return _content;
         }
 
+        /// <summary>
+        /// Is the content in this leaf expired?
+        /// </summary>
+        /// <returns>true if expired</returns>
         public bool IsExpired()
         {
             if (MaxAge == 0) {

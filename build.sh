@@ -1,6 +1,8 @@
 #!/bin/bash
 set -ev
+echo -en 'travis_fold:start:nuget\\r'
 mono nuget.exe restore $SLN
+echo -en 'travis_fold:end:nuget\\r'
 
 msbuild /p:Configuration=$VERSION $SLN
 

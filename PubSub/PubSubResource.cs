@@ -6,12 +6,20 @@ using System.Threading.Tasks;
 using Com.AugustCellars.CoAP;
 using Com.AugustCellars.CoAP.Server.Resources;
 
-namespace PubSub
+namespace Com.AugustCellars.CoAP.PubSub
 {
+    /// <summary>
+    /// Implement the Publish/Subscribe REST API.
+    /// </summary>
     public class PubSubResource : Resource
     {
         private readonly bool _doDiscovery;
 
+        /// <summary>
+        /// Construct the root of a Publish/Subscript REST API interface
+        /// </summary>
+        /// <param name="name">Name for the resource</param>
+        /// <param name="doDiscovery">Implement discovery?</param>
         public PubSubResource(string name, bool doDiscovery = true) : base(name)
         {
             Attributes.AddResourceType("core.ps");
@@ -23,6 +31,10 @@ namespace PubSub
             Attributes.AddContentType(64);
         }
 
+        /// <summary>
+        /// What is the maximum time between publish and expiration of the node
+        /// 0 means never expire.
+        /// </summary>
         public int MaxAge { get; set; }
 
         /// <summary>

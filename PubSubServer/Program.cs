@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Com.AugustCellars.CoAP.Log;
 using Com.AugustCellars.CoAP.Server;
-using PubSub;
+using Com.AugustCellars.CoAP.PubSub;
 
 namespace PubSubServer
 {
