@@ -3,10 +3,10 @@
 [![NuGet Status](https://img.shields.io/nuget/v/Com.AugustCellars.CoAP.png)](https://www.nuget.org/packages/Com.AugustCellars.CoAP)
 [![Build Status](https://api.travis-ci.org/jimsch/CoAP-CSharp.png)](https://travis-ci.org/jimsch/CoAP-CSharp)
 
-The Constrained Application Protocol (CoAP) (https://datatracker.ietf.org/doc/draft-ietf-core-coap/) is a RESTful web transfer protocol for resource-constrained networks and nodes.
+The [Constrained Application Protocol (CoAP)](https://datatracker.ietf.org/doc/draft-ietf-core-coap/) is a RESTful web transfer protocol for resource-constrained networks and nodes.
 CoAP.PubSub is a publish/subscription REST API to allow a server to act as the distribution point for data.
 
-The specification for the REST API can be found at [PubSub]{https://datatracker.ietf.org/doc/draft-ietf-core-coap-pubsub/}.
+The specification for the REST API can be found at [PubSub](https://datatracker.ietf.org/doc/draft-ietf-core-coap-pubsub/).
 
 
 ## Copyright
