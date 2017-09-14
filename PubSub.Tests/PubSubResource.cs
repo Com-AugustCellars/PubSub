@@ -68,8 +68,8 @@ namespace PubSub.Tests
             Assert.AreEqual(2, links.Count);
             string[] linkStrings = resp.PayloadString.Split(',');
 
-            Assert.AreEqual("</ps/topic2>;ct=60;obs", linkStrings[0]);
-            Assert.AreEqual("</ps/topic1>;ct=0;obs", linkStrings[1]);
+            Assert.Contains("</ps/topic2>;ct=60;obs", linkStrings);
+            Assert.Contains("</ps/topic1>;ct=0;obs", linkStrings);;
         }
     }
 }
