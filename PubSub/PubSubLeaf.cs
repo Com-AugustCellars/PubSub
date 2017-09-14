@@ -12,20 +12,29 @@ namespace PubSub
     {
         private byte[] _content;
         private int _contentType;
-        private int _maxAge = 0;
+        private DateTime _publishTime;
+
+        public int MaxAge { get ; set ; }
 
         public PubSubLeaf(string name) : base(name)
         {
             Observable = true;
+            _publishTime = DateTime.Now;
         }
 
         protected override void DoDelete(CoapExchange exchange)
         {
-            base.DoDelete(exchange);
+            Parent.Remove(this);
+            exchange.Respond(StatusCode.Deleted);
         }
 
         protected override void DoGet(CoapExchange exchange)
         {
+            if (IsExpired()) {
+                exchange.Respond(StatusCode.NotFound);
+                return;
+            }
+
             Request request = exchange.Request;
             byte[] payload = _content;
             Response response = Response.CreateResponse(request, StatusCode.Content);
@@ -42,7 +51,7 @@ namespace PubSub
                 }
             }
 
-            if (_maxAge > 0) exchange.MaxAge = _maxAge;
+            if (MaxAge > 0) exchange.MaxAge = MaxAge;
             response.ContentFormat = _contentType;
             response.Payload = payload;
 
@@ -79,8 +88,15 @@ namespace PubSub
                 Changed();
             }
 
+            if (req.HasOption(OptionType.MaxAge)) {
+                MaxAge = req.GetFirstOption(OptionType.MaxAge).IntValue;
+            }
+
+            _publishTime = DateTime.Now;
+
             exchange.Respond(StatusCode.Changed);
         }
+
 
 
         public virtual byte[] ConvertTo(int accept)
@@ -90,6 +106,18 @@ namespace PubSub
             }
 
             return _content;
+        }
+
+        public bool IsExpired()
+        {
+            if (MaxAge == 0) {
+                return false;
+            }
+
+            if (DateTime.Now > _publishTime + TimeSpan.FromSeconds(MaxAge)) {
+                return true;
+            }
+            return false;
         }
     }
 }

@@ -23,6 +23,8 @@ namespace PubSub
             Attributes.AddContentType(64);
         }
 
+        public int MaxAge { get; set; }
+
         /// <summary>
         /// A Get does the discovery thing on this node and it's children.
         /// </summary>
@@ -102,14 +104,23 @@ namespace PubSub
 
             //  Create the topic
 
+            int maxAge = 0;
+            if (request.HasOption(OptionType.MaxAge)) {
+                    maxAge = request.GetFirstOption(OptionType.MaxAge).IntValue;
+            }
+
             IResource child;
             if (linkInfo.Attributes.GetContentTypes().Any(p =>
                 p.Equals("40")
             )) {
-                child = new PubSubResource(linkInfo.Uri);
+                child = new PubSubResource(linkInfo.Uri, false) {
+                    MaxAge = maxAge
+                };
             }
             else {
-                child = new Resource(linkInfo.Uri);
+                child = new PubSubLeaf(linkInfo.Uri) {
+                    MaxAge = maxAge
+                };
                 foreach (string key in linkInfo.Attributes.Keys) {
                     bool f = true;
                     foreach (string value in linkInfo.Attributes.GetValues(key)) {
@@ -119,6 +130,7 @@ namespace PubSub
                     if (f) child.Attributes.Add(key);
                 }
             }
+
 
             this.Add(child);
 
